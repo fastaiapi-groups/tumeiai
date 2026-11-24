@@ -1,0 +1,198 @@
+/* tumeiai: 一键同步价格弹窗 */
+.tumeiai-price-sync {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-block: 8px;
+}
+
+.tumeiai-price-sync-controls {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    padding: 16px;
+    border-radius: var(--admin-radius);
+    background: var(--admin-surface-2);
+}
+
+.tumeiai-price-sync-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 180px;
+    max-width: 100%;
+    font-size: 12px;
+}
+
+.tumeiai-price-sync-field.is-wide {
+    width: 280px;
+}
+
+.tumeiai-price-sync-field > .ant-input-number,
+.tumeiai-price-sync-field > .ant-select {
+    width: 100%;
+}
+
+.tumeiai-price-sync-note,
+.tumeiai-price-sync-summary,
+.tumeiai-price-sync-list-heading > span,
+.tumeiai-price-sync-identity small,
+.tumeiai-price-sync-field-row small,
+.tumeiai-price-sync-muted {
+    margin: 0;
+    color: var(--admin-text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.tumeiai-price-sync-summary,
+.tumeiai-price-sync-list-heading {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    overflow-wrap: anywhere;
+}
+
+.tumeiai-price-sync-progress {
+    padding: 24px;
+    border-radius: var(--admin-radius);
+    background: var(--admin-surface-2);
+    text-align: center;
+    color: var(--admin-text-muted);
+}
+
+.tumeiai-price-sync-identity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    overflow-wrap: anywhere;
+}
+
+.tumeiai-price-sync-identity .is-error,
+.tumeiai-price-sync-tier .is-error {
+    color: var(--admin-status-error);
+    font-size: 12px;
+}
+
+.tumeiai-price-sync-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.tumeiai-price-sync-link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--admin-text-muted);
+    font-size: 12px;
+    text-decoration: underline dotted;
+    cursor: pointer;
+}
+
+.tumeiai-price-sync-link:disabled {
+    cursor: not-allowed;
+}
+
+.tumeiai-price-sync-link:focus-visible {
+    outline: 2px solid var(--admin-focus);
+    outline-offset: 2px;
+}
+
+.tumeiai-price-sync-tiers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tumeiai-price-sync-tier {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 8px;
+    align-items: start;
+}
+
+.tumeiai-price-sync-tier-label {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.tumeiai-price-sync-fields,
+.tumeiai-price-sync-field-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tumeiai-price-sync-field-row > span {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.tumeiai-price-sync-upstream-only summary {
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--admin-text-muted);
+}
+
+.tumeiai-price-sync-upstream-only p {
+    margin: 8px 0 0;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.tumeiai-price-sync-result {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tumeiai-price-sync-result section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+}
+
+.tumeiai-price-sync-result p,
+.tumeiai-price-sync-result ul {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.tumeiai-price-sync-result ul {
+    padding-left: 18px;
+}
+
+.tumeiai-price-sync-auto {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 16px;
+    border-radius: var(--admin-radius);
+    background: var(--admin-surface-2);
+}
+
+.tumeiai-price-sync-auto-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    font-size: 13px;
+}
+
+.tumeiai-price-sync-auto .is-error {
+    color: var(--ant-color-error, #d4380d);
+}
+
+.tumeiai-price-sync-creates {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

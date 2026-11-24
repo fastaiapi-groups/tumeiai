@@ -1,0 +1,88 @@
+.subscription-admin-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+}
+.subscription-admin-intro {
+    color: var(--muted-foreground);
+    margin: 0 0 var(--space-4);
+}
+.subscription-admin-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+.subscription-admin-summary > div {
+    padding: var(--space-5, 20px);
+    border: 1px solid var(--border);
+    border-radius: var(--r-xl);
+    background: var(--card);
+}
+.subscription-admin-summary strong {
+    display: block;
+    font-size: var(--fs-title);
+    margin-top: var(--space-2);
+}
+.subscription-editor-body {
+    min-height: 360px;
+    max-height: 60vh;
+    overflow: auto;
+    padding: var(--space-4) var(--space-1);
+}
+.subscription-editor-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: var(--space-4);
+    margin-top: var(--space-4);
+    border-top: 1px solid var(--border);
+}
+.subscription-editor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+}
+.subscription-editor-grid .ant-form-item {
+    margin-bottom: var(--space-3);
+}
+.subscription-matrix-scroll {
+    overflow: auto;
+    flex: 1;
+    min-height: 0;
+    max-height: 55vh;
+}
+.subscription-matrix {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+.subscription-matrix th,
+.subscription-matrix td {
+    min-width: 180px;
+    padding: var(--space-2);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+.subscription-matrix th {
+    position: sticky;
+    top: 0;
+    background: var(--card);
+    z-index: 1;
+    text-align: left;
+}
+.subscription-matrix th:first-child,
+.subscription-matrix td:first-child {
+    min-width: 230px;
+}
+.subscription-matrix textarea {
+    min-height: 56px;
+}
+@media (max-width: 700px) {
+    .subscription-admin-summary,
+    .subscription-editor-grid {
+        grid-template-columns: 1fr;
+    }
+}

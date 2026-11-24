@@ -1,0 +1,114 @@
+/* tumeiai: 剧情段参考图移除入口，见 segment-references-tumeiai.tsx */
+.drama-reference-tile-tumeiai {
+    position: relative;
+    display: grid;
+    min-width: 0;
+}
+.drama-reference-tile-remove-tumeiai {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--background);
+    color: var(--text-secondary);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    opacity: 0.85;
+    transition:
+        opacity var(--motion-state) ease-out,
+        color var(--motion-state) ease-out;
+}
+.drama-reference-tile-tumeiai:hover .drama-reference-tile-remove-tumeiai,
+.drama-reference-tile-remove-tumeiai:focus-visible {
+    opacity: 1;
+    color: var(--drama-err);
+}
+.drama-reference-tile-remove-tumeiai:focus-visible {
+    outline: var(--focus-ring-width) solid var(--ring);
+    outline-offset: 1px;
+}
+.drama-reference-tile-remove-tumeiai:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+.drama-referenced-label-tumeiai .is-hover {
+    display: none;
+}
+button:hover > .drama-referenced-label-tumeiai .is-idle,
+button:focus-visible > .drama-referenced-label-tumeiai .is-idle {
+    display: none;
+}
+button:hover > .drama-referenced-label-tumeiai .is-hover,
+button:focus-visible > .drama-referenced-label-tumeiai .is-hover {
+    display: inline;
+    color: var(--drama-err);
+}
+
+.drama-unsent-refs-tumeiai {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--drama-warn) 10%, transparent);
+    color: color-mix(in oklab, var(--drama-warn) 70%, var(--foreground));
+    font-size: var(--fs-label);
+}
+.drama-unsent-refs-tumeiai-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+}
+.drama-unsent-refs-tumeiai ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.drama-unsent-refs-tumeiai li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-half) var(--space-1) var(--space-half) var(--space-2);
+    border-radius: 999px;
+    background: var(--background);
+    color: var(--foreground);
+}
+.drama-unsent-refs-tumeiai li button {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.drama-unsent-refs-tumeiai li button:hover,
+.drama-unsent-refs-tumeiai li button:focus-visible {
+    background: var(--surface-hover);
+    color: var(--drama-err);
+}
+.drama-unsent-refs-tumeiai li button:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+.drama-unsent-refs-tumeiai small {
+    color: var(--text-secondary);
+}
+.drama-unsent-actions-tumeiai {
+    flex-wrap: wrap;
+    gap: var(--space-1);
+}

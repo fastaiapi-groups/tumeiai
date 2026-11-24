@@ -1,0 +1,35 @@
+.subscription-feature-disclosure {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.subscription-feature-disclosure.is-collapsed {
+    position: relative;
+    margin-top: -112px;
+    min-height: 200px;
+    box-sizing: border-box;
+    align-items: center;
+    background: linear-gradient(to bottom, transparent 0%, color-mix(in srgb, var(--subscription-bg) 55%, transparent) 30%, color-mix(in srgb, var(--subscription-bg) 94%, transparent) 65%, var(--subscription-bg) 100%);
+    pointer-events: none;
+}
+.subscription-feature-disclosure button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 22px;
+    border: 1px solid var(--subscription-border);
+    border-radius: var(--radius-full, 999px);
+    background: var(--subscription-bg);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    pointer-events: auto;
+}
+.subscription-feature-disclosure button:hover {
+    background: var(--subscription-panel);
+}
+.subscription-feature-disclosure button:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+}

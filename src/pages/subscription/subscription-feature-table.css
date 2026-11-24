@@ -1,0 +1,41 @@
+.subscription-feature-table .feature-primary {
+    display: block;
+    white-space: pre-line;
+}
+.subscription-feature-table .feature-detail {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--muted-foreground);
+}
+.subscription-feature-table .feature-discount {
+    display: inline-block;
+    margin: 5px 4px 0 0;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    color: var(--status-warning);
+    font-size: 12px;
+}
+.subscription-feature-table .feature-yes {
+    color: var(--status-success);
+    font-size: 22px;
+}
+.subscription-feature-table .feature-no {
+    color: var(--muted-foreground);
+}
+.subscription-feature-table .feature-price {
+    margin-top: 24px;
+    font-size: 25px;
+}
+.subscription-feature-table .feature-price del {
+    margin-right: 8px;
+    color: var(--muted-foreground);
+    font-size: 16px;
+    font-weight: normal;
+}
+.subscription-feature-table .subscription-comparison-multiplier {
+    margin-top: 24px;
+}
+.subscription-feature-table .subscription-billing-toggle {
+    flex-wrap: wrap;
+}

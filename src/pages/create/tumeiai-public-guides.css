@@ -1,0 +1,21 @@
+/* 创作首页底部的公开介绍页入口。独立成文件，不改 creation-product.css。 */
+.creation-public-guides {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 24px;
+    padding: 20px;
+    color: var(--user-ink-muted);
+    font-size: 12px;
+}
+.creation-public-guides a {
+    color: inherit;
+    text-underline-offset: 4px;
+}
+.creation-public-guides a:hover {
+    color: var(--user-accent);
+}
+.creation-public-guides a:focus-visible {
+    outline: 2px solid var(--user-accent);
+    outline-offset: 4px;
+}
