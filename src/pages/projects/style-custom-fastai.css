@@ -1,0 +1,75 @@
+/* fastai: 短剧自定义画风编辑区 */
+.drama-custom-style {
+    display: grid;
+    gap: var(--space-3);
+    min-width: 0;
+    padding: var(--space-3);
+    border-radius: var(--r-lg);
+    background: var(--library-surface);
+}
+
+.drama-custom-style[data-active] {
+    box-shadow: inset 0 0 0 1px var(--control-selected-border);
+}
+
+.drama-custom-style .drama-switch-label > span {
+    display: grid;
+    gap: 2px;
+}
+
+.drama-custom-style .drama-switch-label strong {
+    color: var(--text-primary);
+    font-size: var(--fs-ui);
+    font-weight: 500;
+}
+
+.drama-custom-style .drama-switch-label small {
+    color: var(--text-tertiary);
+    font-size: var(--fs-tiny);
+}
+
+.drama-custom-style-body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+}
+
+.drama-custom-style.is-compact .drama-custom-style-body {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.drama-custom-style-field {
+    display: grid;
+    gap: var(--space-1);
+    min-width: 0;
+}
+
+.drama-custom-style-field > span {
+    color: var(--text-secondary);
+    font-size: var(--fs-tiny);
+    font-weight: 500;
+}
+
+.drama-custom-style-field > span small {
+    margin-left: var(--space-1);
+    color: var(--text-tertiary);
+    font-weight: 400;
+}
+
+.drama-custom-style-status {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--text-tertiary);
+    font-size: var(--fs-micro);
+    line-height: 1.6;
+}
+
+.drama-custom-style-status.is-error {
+    color: var(--color-status-error);
+}
+
+@media (max-width: 720px) {
+    .drama-custom-style-body {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

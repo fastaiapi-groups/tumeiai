@@ -39,6 +39,7 @@ import { DramaModelPicker, useDramaModelCatalog } from "./drama-model-picker";
 import { DramaAssetImageModels, DramaTextSteps, VideoResolutionField } from "./step-settings";
 import { EpisodeDurationInput, StoryboardRules } from "./storyboard-rules";
 import { DramaStylePicker } from "./style-picker";
+import { DramaCustomStyleEditorFastai, useDramaCustomStyleFastai } from "./style-custom-fastai";
 import { ChapterPickList } from "./chapter-pick-list";
 import "./drama.css";
 
@@ -126,7 +127,8 @@ export default function DramaCreatePage() {
     const assets = assetDraft || defaultAssetSettings(assetCatalog.data);
     const [previewIndex, setPreviewIndex] = useState(0);
 
-    const style = findDramaStyle(styleId);
+    const customStyle = useDramaCustomStyleFastai(styleId, setStyleId); // fastai: 自定义画风
+    const style = customStyle.style;
     const catalogQuery = useDramaModelCatalog();
     const resolvedModels = useMemo<DramaModels | undefined>(() => {
         const catalog = catalogQuery.data;
@@ -256,6 +258,7 @@ export default function DramaCreatePage() {
         if (saved.aspectRatio) setAspectRatio(saved.aspectRatio);
         if (saved.episodeSeconds) setEpisodeSeconds(saved.episodeSeconds);
         if (draft.form.styleId && findDramaStyle(draft.form.styleId)) setStyleId(draft.form.styleId);
+        customStyle.hydrate(draft.form.styleId, saved.styleName, saved.stylePrompt); // fastai: 自定义画风回填
         if (saved.language) setLanguage(saved.language);
         if (saved.reviewMode) setReviewMode(saved.reviewMode);
         if (saved.mediaMode) setMediaMode(saved.mediaMode);
@@ -325,7 +328,7 @@ export default function DramaCreatePage() {
     });
     const tooLong = longSelected > 0 || Boolean(oversizedGroup);
     // 草稿不要求模型齐全（服务端只在开工时检查），但画幅与续接方式仍会被服务端校验；分辨率给不出时按模型默认。
-    const canSaveDraft = Boolean(analysis && selectedIndexes.length && name.trim() && resolvedModels && !videoRatioProblem && !tailFrameProblem && !tooLong && !create.isPending);
+    const canSaveDraft = Boolean(analysis && selectedIndexes.length && name.trim() && resolvedModels && !videoRatioProblem && !tailFrameProblem && !tooLong && !customStyle.issue && !create.isPending); // fastai: 自定义画风需填完整
     const canStart = canSaveDraft && missingCapabilities.length === 0;
     const reservedCount = analysis ? analysis.chapters.length - selectedIndexes.length : 0;
     // 超长章节的提示按选择拆开：选中的必须拆开才能开工，没选中的只提醒加入制作前要拆。
@@ -536,6 +539,7 @@ export default function DramaCreatePage() {
                         </div>
                     </section>
                     <DramaStylePicker value={styleId} onChange={setStyleId} disabled={create.isPending} />
+                    <DramaCustomStyleEditorFastai active={customStyle.active} value={customStyle.custom} onToggle={customStyle.toggle} onChange={customStyle.setCustom} disabled={create.isPending} />
                     <section>
                         <div className="drama-section-title">
                             <h2>文字步骤</h2>

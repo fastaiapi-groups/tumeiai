@@ -5,6 +5,7 @@ import { RefreshCw } from "lucide-react";
 import { DEFAULT_DRAMA_STYLE_ID, findDramaStyle } from "@/lib/drama/drama-styles";
 import { rebuildDramaCastImagePrompt, type DramaCastImageStyle } from "@/services/api/drama";
 import { StyleCompositionPicker } from "../style-picker";
+import { CastCustomStyleFastai } from "../style-custom-fastai";
 
 export type CastImageFieldsValue = DramaCastImageStyle & { imagePrompt?: string };
 
@@ -60,7 +61,10 @@ export function CastImageFields({
                 为此设定单独设置风格
             </label>
             {ownStyle ? (
-                <StyleCompositionPicker value={value.imageStyleId || DEFAULT_DRAMA_STYLE_ID} onChange={chooseStyle} disabled={disabled || building} />
+                <>
+                    <StyleCompositionPicker value={value.imageStyleId || DEFAULT_DRAMA_STYLE_ID} onChange={chooseStyle} disabled={disabled || building} />
+                    <CastCustomStyleFastai value={value} onChange={onChange} disabled={disabled || building} /> {/* fastai: 自定义画风 */}
+                </>
             ) : (
                 <small className="drama-editor-note">沿用作品风格；穿越、幼年或不同世界的造型可在此单独选择。</small>
             )}
