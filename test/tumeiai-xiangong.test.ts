@@ -14,15 +14,16 @@ describe("tumeiai xiangong", () => {
         expect(tumeiaiIsXiangongImageId("../etc")).toBe(false);
     });
 
-    test("镜像下拉：中文名称、值为镜像 ID，私有镜像只能中转，专用工作流镜像两种来源都可选", () => {
+    test("镜像下拉：中文名称、值为镜像 ID，含猴赛雷 v3，不再列出平台私有镜像，专用工作流镜像两种来源都可选", () => {
         for (const image of TUMEIAI_XIANGONG_IMAGES) {
             expect(image.value === "" || tumeiaiIsXiangongImageId(image.value)).toBe(true);
             expect(image.label).toMatch(/[\u4e00-\u9fa5]/);
         }
         const own = tumeiaiXiangongImageOptions("own", "");
-        expect(own.find((option) => option.value === "2911b873-f283-420d-a788-d6e5974c29eb")).toMatchObject({ disabled: true, label: "私有镜像 v3（仅中转）" });
+        expect(own.find((option) => option.value === "6ade1f36-2b22-4b87-afa7-af4c2e8a543c")).toMatchObject({ disabled: false, label: "猴赛雷镜像 v3 · MiniMax H3" });
+        expect(own.some((option) => option.value === "96c6f99c-f64b-4605-86dc-e5ec9a69cce1" || option.value === "2911b873-f283-420d-a788-d6e5974c29eb")).toBe(false);
         expect(own.find((option) => option.value === "6c731fb9-45ee-4a89-92b8-228007184783")).toMatchObject({ disabled: false });
-        expect(TUMEIAI_XIANGONG_IMAGES.length).toBe(8);
+        expect(TUMEIAI_XIANGONG_IMAGES.length).toBe(7);
         expect(own[0]).toMatchObject({ value: "", label: "默认镜像" });
         const relay = tumeiaiXiangongImageOptions("relay", "");
         expect(relay.find((option) => option.value === "b900441e-8c7e-4f00-bce6-bfe50ae47408")).toMatchObject({ disabled: false, label: "H3 文戏 8 步（Pinggoo）" });
@@ -30,7 +31,7 @@ describe("tumeiai xiangong", () => {
         expect(tumeiaiXiangongImageAllowed("relay", "76081786-f098-45a1-992d-209943cb073f")).toBe(true);
         expect(tumeiaiXiangongImageAllowed("own", "b900441e-8c7e-4f00-bce6-bfe50ae47408")).toBe(true);
         expect(tumeiaiXiangongImageAllowed("relay", "")).toBe(true);
-        expect(tumeiaiXiangongImageAllowed("own", "96c6f99c-f64b-4605-86dc-e5ec9a69cce1")).toBe(false);
+        expect(tumeiaiXiangongImageAllowed("own", "6ade1f36-2b22-4b87-afa7-af4c2e8a543c")).toBe(true);
         expect(tumeiaiXiangongImageAllowed("own", "00000000-0000-4000-8000-000000000000")).toBe(true);
     });
 
