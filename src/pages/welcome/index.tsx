@@ -67,7 +67,9 @@ function WelcomeExperience({ look, brandName, onLookChange }: { look: WelcomeLoo
         const onScroll = () => {
             if (!storyRef.current) return;
             const rect = storyRef.current.getBoundingClientRect();
-            const progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
+            // 故事区不高于视口时没有可滚动距离，0/0 会得到 NaN 并让动画取到不存在的机位。
+            const scrollable = rect.height - window.innerHeight;
+            const progress = scrollable > 0 ? Math.max(0, Math.min(1, -rect.top / scrollable)) : 0;
             progressRef.current = progress;
             storyRef.current.style.setProperty("--story-progress", String(progress));
             setChapter(Math.min(5, Math.floor(progress * 6)));
