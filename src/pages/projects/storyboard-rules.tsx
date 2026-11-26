@@ -378,7 +378,14 @@ export function StoryboardRules({
                     {target ? (
                         <>
                             {" "}
-                            · {segmentRuleLabel(limits)}，{limits.mode === "auto" ? "至少" : "约"} <b>{Math.max(1, Math.ceil(episodeSeconds / target))}</b> 段 · 每段约 <b>{Math.max(1, Math.round(target / averageShotSeconds(rules)))}</b> 镜
+                            · {segmentRuleLabel(limits)}，{limits.mode === "auto" ? "至少" : "约"} <b>{Math.max(1, Math.ceil(episodeSeconds / target))}</b> 段 ·{" "}
+                            {limits.mode === "shot" ? (
+                                <>每段 1 镜，过短的与后面合并</> /* fastai: 按镜头切段 */
+                            ) : (
+                                <>
+                                    每段约 <b>{Math.max(1, Math.round(target / averageShotSeconds(rules)))}</b> 镜
+                                </>
+                            )}
                         </>
                     ) : null}
                 </span>
