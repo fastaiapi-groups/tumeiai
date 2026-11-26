@@ -12,6 +12,7 @@ import { aspectRatioValue, formatClock, mediaBusy, MediaThumb, useResourceMediaU
 import { promptReady, secondsLabel, SegmentInputs, SegmentStatus, segmentState } from "./segment-parts";
 import { dramaVideoOptionFor } from "./segment-quote";
 import { isTypingTarget } from "./use-studio";
+import { ReferenceOverflowBarFastai, SegmentReferenceCountFastai } from "./segment-reference-budget-fastai"; // fastai: 参考图名额
 import { progressFillStyle } from "@/lib/progress-fill";
 
 type Props = {
@@ -174,6 +175,7 @@ const SegmentCard = memo(function SegmentCard({ segment, segmentShots, aspectRat
                         <span>
                             {segmentShots.length} 镜{segment.request.maxVideoSeconds ? ` · 上限 ${segment.request.maxVideoSeconds}s` : ""}
                         </span>
+                        <SegmentReferenceCountFastai segment={segment} castById={castById} /> {/* fastai: 参考图名额 */}
                     </div>
                     <SegmentInputs segment={segment} castById={castById} compact />
                     {segmentShots.length === 1 ? (
@@ -456,6 +458,7 @@ export function Storyboard({ shots, segments, aspectRatio, castById, defaultVide
                     </>
                 )}
             </div>
+            <ReferenceOverflowBarFastai shots={shots} segments={segments} castById={castById} busy={busy} /> {/* fastai: 超出参考图名额时重新切段 */}
             <div ref={gridRef} className={`drama-sg-grid ${aspectRatio === "16:9" || aspectRatio === "4:3" ? "is-landscape" : ""}`} role="listbox" aria-multiselectable aria-label="剧情段">
                 {segments.map((segment) => (
                     <SegmentCard

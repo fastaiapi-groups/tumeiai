@@ -1073,8 +1073,8 @@ export function SettingsPanel({ projectId, summary, cast, onChanged }: { project
                                 </div>
                             </section>
                             <section className="drama-cfg-card">
-                                <SettingsTitle title="每段最多参考图" detail="自动取参考图时的上限，人物优先；0 为按视频模型上限" />
-                                <InputNumber className="!w-full" min={0} max={20} precision={0} value={settings.referenceLimit || 0} onChange={(value) => setSettings({ ...settings, referenceLimit: value || 0 })} suffix="张" aria-label="每段最多参考图" />
+                                <SettingsTitle title="每段最多参考图" detail="默认 9 张，实际不超过视频模型上限；超出时优先发说台词的人物与正文引用的设定" /> {/* fastai: 默认 9 张 */}
+                                <InputNumber className="!w-full" min={1} max={20} precision={0} value={settings.referenceLimit || 9} onChange={(value) => setSettings({ ...settings, referenceLimit: value || 9 })} suffix="张" aria-label="每段最多参考图" />
                                 <p className="drama-cfg-note">超出的设定按文字描述生成，不附图。个别段需要更多参考图时，在剧情段弹窗里手动指定，只受模型上限约束。</p>
                             </section>
                             <section className="drama-cfg-card">

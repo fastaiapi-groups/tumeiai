@@ -56,7 +56,7 @@ export type DramaAssetScheme = {
 export type DramaAssetSchemeCatalog = { schemes: DramaAssetScheme[]; scenePrompt: string; propPrompt: string; characterVariables: string[]; sceneVariables: string[]; propVariables: string[] };
 
 /** 剧情段怎么切：智能按场景与冲突切、单段不超过模型上限；固定每段 segmentSeconds 秒；范围在 segmentMin–MaxSeconds 之间。 */
-export type DramaSegmentMode = "auto" | "fixed" | "range";
+export type DramaSegmentMode = "auto" | "fixed" | "range" | "shot"; // fastai: shot 按镜头切段
 
 /**
  * 分镜规则：剧情段（一次视频调用）怎么切、镜头节奏、对白密度与转场。
@@ -115,7 +115,7 @@ export type DramaSettings = {
     models: DramaModels;
     /** 各文字阶段独立的思考意图；缺省按对应模型默认值执行。 */
     textThinking?: DramaTextThinking;
-    /** 自动取参考图时每段最多发送的张数，0 为按视频模型上限；手动指定参考图的段只受模型上限约束。 */
+    /** 自动取参考图时每段最多发送的张数（fastai: 默认 9，实际不超过视频模型上限）；手动指定参考图的段只受模型上限约束。 */
     referenceLimit: number;
     /** 小说分集方式：chapter 每 chaptersPerEpisode 章一集，auto 由模型规划；空表示早期作品没有记录。分集完成后不能修改。 */
     episodeMode?: DramaEpisodeMode;

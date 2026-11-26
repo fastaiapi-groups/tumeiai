@@ -100,12 +100,14 @@ const SEGMENT_MODES: Array<{ value: DramaSegmentMode; label: string; detail: str
     { value: "auto", label: "智能", detail: "按场景切换与冲突转折切段，单段不超过视频模型单次上限" },
     { value: "fixed", label: "固定", detail: "每段固定秒数，跨场景也按时长切" },
     { value: "range", label: "范围", detail: "每段在设定范围内，达到下限后在场景切换处断开" },
+    { value: "shot", label: "按镜头", detail: "每个镜头单独生成，参考图最少；不足模型最短时长的镜头与后面合并，视频调用次数与费用明显增加" }, // fastai: 按镜头切段
 ];
 
 /** 剧情段切法的一句话说明，分镜规则卡与剧本页共用。 */
 export function segmentRuleLabel(limits: SegmentLimits) {
     if (limits.mode === "fixed") return `每段 ${limits.max} 秒`;
     if (limits.mode === "range") return `每段 ${limits.min}–${limits.max} 秒`;
+    if (limits.mode === "shot") return "按镜头切段"; // fastai: 按镜头切段
     return limits.max ? `智能切段 · 单段不超过 ${limits.max} 秒` : "智能切段";
 }
 /** 与后端 production.pacingRules 一致，从快到慢。 */

@@ -1,0 +1,26 @@
+/* fastai: 剧情段参考图名额，见 segment-reference-budget-fastai.tsx */
+.drama-sg-refcount-fastai {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+.drama-sg-refcount-fastai.is-over {
+    color: var(--drama-warn);
+}
+.drama-refbudget-bar-fastai {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid color-mix(in oklab, var(--drama-warn) 40%, transparent);
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--drama-warn) 8%, transparent);
+    color: var(--text-secondary);
+    font-size: var(--fs-caption);
+}
+.drama-refbudget-bar-fastai b {
+    color: var(--drama-warn);
+    font-weight: 600;
+}

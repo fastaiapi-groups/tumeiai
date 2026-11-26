@@ -35,6 +35,9 @@ function directionLevel(value: unknown, fallback: number) {
     return Number.isFinite(level) && level > 0 ? clamp(level, DIRECTION_LEVEL_MIN, DIRECTION_LEVEL_MAX) : fallback;
 }
 
+/** fastai: “按镜头”档估算段数用的典型段长（秒），不足模型下限的镜头会与后面的镜头合并。 */
+export const SHOT_SEGMENT_SECONDS_FASTAI = 5;
+
 export const EPISODE_PRESETS = [60, 90, 120, 180, 300, 600];
 
 /** 一档对白：语速（字/秒）、平均每隔多少秒一句、单句字数上限、台词后的气口（毫秒）。 */
@@ -71,7 +74,8 @@ export function normalizeStoryboard(input?: Partial<DramaStoryboardSettings>): D
     };
     const tenth = (n: number) => Math.round(n * 10) / 10;
     return {
-        segmentMode: (["fixed", "range", "auto"] as DramaSegmentMode[]).includes(value.segmentMode) ? value.segmentMode : DEFAULT_STORYBOARD.segmentMode,
+        // fastai: shot 为按镜头切段
+        segmentMode: (["fixed", "range", "auto", "shot"] as DramaSegmentMode[]).includes(value.segmentMode) ? value.segmentMode : DEFAULT_STORYBOARD.segmentMode,
         segmentSeconds: seconds(value.segmentSeconds, DEFAULT_STORYBOARD.segmentSeconds),
         segmentMinSeconds: Math.min(low, high),
         segmentMaxSeconds: Math.max(low, high),
@@ -120,11 +124,13 @@ export function segmentLimits(settings: DramaStoryboardSettings, modelMaxSeconds
         const max = capped(rules.segmentMaxSeconds);
         return { mode: "range", min: Math.min(capped(rules.segmentMinSeconds), max), max };
     }
+    if (rules.segmentMode === "shot") return { mode: "shot", min: 0, max: modelMaxSeconds || 0 }; // fastai: 按镜头切段
     return { mode: "auto", min: 0, max: modelMaxSeconds || 0 };
 }
 
 /** 一段的典型时长，用于估算段数：范围取中值，智能按模型上限（段数下限）。 */
 export function segmentTargetSeconds(limits: SegmentLimits) {
+    if (limits.mode === "shot") return SHOT_SEGMENT_SECONDS_FASTAI; // fastai: 按镜头切段，常见模型单次最短约 5 秒
     return limits.mode === "range" ? Math.floor((limits.min + limits.max) / 2) : limits.max;
 }
 
