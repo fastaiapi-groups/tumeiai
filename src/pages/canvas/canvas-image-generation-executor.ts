@@ -13,6 +13,8 @@ import { canvasGenerationPromptMetadata } from "@/lib/canvas/canvas-generation-s
 import { batchOutputResultPending } from "@/lib/canvas/canvas-batch-references";
 import { mediaVersionFieldsBeforeReplace } from "@/lib/canvas/canvas-media-versions";
 import { commitProducedModel } from "@/lib/canvas/produced-model";
+import { declaredCanvasNodeAssetCategory } from "@/lib/canvas/canvas-node-asset";
+import { canvasGenerationAssetCategoryFastai } from "@/lib/asset-category-fastai";
 import { CONTENT_MODERATION_ERROR_CODE, generationFailureMetadata, type GenerationFailureMetadata } from "@/lib/generation-error";
 import { CanvasNodeType, type CanvasNodeData } from "@/types/canvas";
 import { useCanvasStore } from "@/stores/canvas/use-canvas-store";
@@ -229,6 +231,7 @@ export async function executeImageGeneration(
                         signal: controller.signal,
                         metadata: {
                             assetTitle: childNodes.find((node) => node.id === targetId)?.title || rootNode.title,
+                            assetCategory: sourceNode ? canvasGenerationAssetCategoryFastai(declaredCanvasNodeAssetCategory(sourceNode)) : undefined, // fastai: 设定图等带分类节点的生成结果沿用分类
                             sourceNodeId: nodeId,
                             ...taskContext,
                             resolvedCharacterVersions: generationContext.resolvedCharacterVersions,

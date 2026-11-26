@@ -33,6 +33,7 @@ import { useCopyText } from "@/hooks/use-copy-text";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { arkLibraryProgressMap } from "@/lib/ark-assets";
 import { ARK_ASSET_CATEGORY, ASSET_ASSIGNABLE_CATEGORY_OPTIONS, ASSET_CATEGORY_LABELS, ASSET_CATEGORY_OPTIONS, defaultAssetCategoryForKind, normalizeAssetCategory } from "@/lib/asset-category";
+import { assetFolderTotalFastai } from "@/lib/asset-category-fastai";
 import { downloadBrowserMedia } from "@/services/browser-download";
 import { flushAssetStorePersistence, useAssetStore, type AssetCategory, type AssetKind, type ImageAsset } from "@/stores/use-asset-store";
 import { loadAssetLibraryPage, loadAssetsForUse, saveRemoteUserDataNow, localSavedRemotePendingMessage, deleteAssetsWithRemoteSync, deleteAssetWithRemoteSync } from "@/services/user-data-sync";
@@ -868,7 +869,7 @@ export default function AssetsPage() {
                                             }}
                                         >
                                             <span className="assets-filter-item-label">{t("library.assets.kind.all")}</span>
-                                            <span className="assets-filter-count">{activeAssets.length}</span>
+                                            <span className="assets-filter-count">{assetFolderTotalFastai(assetPageQuery.data?.folderCounts, activeAssets.length)}</span>
                                         </button>
                                         <button
                                             type="button"

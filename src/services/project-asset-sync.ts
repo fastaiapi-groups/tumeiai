@@ -21,6 +21,7 @@ import { appQueryClient } from "@/lib/query-client";
 import { hasRemoteUserDataSyncSession, loadAssetsForUse, saveRemoteUserDataNow, subscribeRemoteUserDataReady } from "@/services/user-data-sync";
 import { getActiveUserScope } from "@/lib/user-scope";
 import { normalizeAssetCategory } from "@/lib/asset-category";
+import { generationAssetCategoryFastai } from "@/lib/asset-category-fastai";
 import { generationAssetTitle } from "@/lib/generation-asset-title";
 import { runGenerationConsumer } from "@/services/generation-consumer-lifecycle";
 import { ASSET_STORE_KEY, flushAssetStorePersistence, generationAssetId, useAssetStore, type AssetCategory, type AssetStatus, type NewAsset } from "@/stores/use-asset-store";
@@ -499,7 +500,7 @@ async function generationOutputAsset(input: Parameters<MaterializeGenerationTask
         return {
             kind: "image",
             title,
-            category: "material",
+            category: generationAssetCategoryFastai(input.task), // fastai: 按任务携带的节点分类入库
             coverUrl: stored.url,
             tags: ["生成"],
             status: "confirmed",
@@ -539,7 +540,7 @@ async function generationOutputAsset(input: Parameters<MaterializeGenerationTask
         return {
             kind: "video",
             title,
-            category: "material",
+            category: generationAssetCategoryFastai(input.task), // fastai: 按任务携带的节点分类入库
             coverUrl: canvasVideoAssetPreviewUrl(stored.url),
             tags: ["生成"],
             status: "confirmed",
@@ -583,7 +584,7 @@ async function generationOutputAsset(input: Parameters<MaterializeGenerationTask
     return {
         kind: "audio",
         title,
-        category: "material",
+        category: generationAssetCategoryFastai(input.task), // fastai: 按任务携带的节点分类入库
         coverUrl: "",
         tags: ["生成"],
         status: "confirmed",

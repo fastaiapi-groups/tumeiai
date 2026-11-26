@@ -87,6 +87,8 @@ export type GenerationTask = {
         shotId?: string;
         workflowStepId?: string;
         artifactType?: string;
+        /** fastai: 作品入素材库的业务分类；缺省为素材。 */
+        assetCategory?: string;
     };
     created_at?: string;
     updated_at?: string;
