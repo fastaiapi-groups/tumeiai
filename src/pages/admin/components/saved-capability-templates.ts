@@ -79,6 +79,7 @@ const shapes: Record<SavedCapabilityTemplate["capability"], Shape> = {
             maxVideoTotalDurationSeconds: "number",
             maxAudioTotalDurationSeconds: "number",
             maxTotalReferences: "number",
+            framesExclusive: "boolean",
         },
         duration: { selection: "string", min: "number", max: "number", step: "number", values: ["number"], default: "number" },
         durationSupported: "boolean",

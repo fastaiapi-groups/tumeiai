@@ -187,6 +187,8 @@ export function ModelCapabilityEditor({ value, onChange, protocol, definition, c
                         <NumberField label="提示词最大字符数" value={profile.references.promptMaxChars} min={1} disabled={disabled} onChange={(value) => updateReferences({ promptMaxChars: value || 1 })} />
                         {/* tumeiai: 合计个数上限 */}
                         <NumberField label="参考素材合计最多个数（0 为不限）" value={profile.references.maxTotalReferences || 0} min={0} disabled={disabled} onChange={(value) => updateReferences({ maxTotalReferences: value || 0 })} />
+                        {/* tumeiai: 首尾帧与参考素材混用 */}
+                        <ParameterField label="首尾帧与参考素材混用" description={framesMixDescription} supported={!profile.references.framesExclusive} disabled={disabled} onChange={(supported) => updateReferences({ framesExclusive: !supported })} />
                     </ReferenceCard>
                 </div>
             </div>
@@ -352,6 +354,8 @@ export function ModelCapabilityEditor({ value, onChange, protocol, definition, c
                             <NumberField label="提示词最大字符数" value={profile.references.promptMaxChars} min={1} disabled={disabled} onChange={(value) => updateReferences({ promptMaxChars: value || 1 })} />
                             {/* tumeiai: 合计个数上限 */}
                             <NumberField label="参考素材合计最多个数（0 为不限）" value={profile.references.maxTotalReferences || 0} min={0} disabled={disabled} onChange={(value) => updateReferences({ maxTotalReferences: value || 0 })} />
+                            {/* tumeiai: 首尾帧与参考素材混用 */}
+                            <ParameterField label="首尾帧与参考素材混用" description={framesMixDescription} supported={!profile.references.framesExclusive} disabled={disabled} onChange={(supported) => updateReferences({ framesExclusive: !supported })} />
                         </div>
                     </CapabilityGroup>
                 </>
@@ -954,6 +958,9 @@ function BooleanField({ label, value, disabled, onChange }: { label: string; val
         </div>
     );
 }
+
+// tumeiai: 关闭后首尾帧与参考素材同时出现会在提交前拦下，短剧尾帧续接改把上一段尾帧当参考图发送。
+const framesMixDescription = "关闭后首帧、尾帧不能和参考图、视频、音频一起发送；短剧尾帧续接改作参考图";
 
 function ParameterField({ label, description, supported, disabled, onChange }: { label: string; description: string; supported: boolean; disabled: boolean; onChange: (supported: boolean) => void }) {
     return (

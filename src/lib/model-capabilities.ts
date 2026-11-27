@@ -127,6 +127,7 @@ export type VideoCapabilityConfig = {
         /* tumeiai: 合计时长上限，0 或缺省表示不限 */ maxVideoTotalDurationSeconds?: number;
         maxAudioTotalDurationSeconds?: number;
         /* tumeiai: 参考素材合计个数上限，0 或缺省表示不限 */ maxTotalReferences?: number;
+        /* tumeiai: 首尾帧不能与参考图、视频、音频同时发送 */ framesExclusive?: boolean;
     };
     duration: { selection: "range" | "enum"; min?: number; max?: number; step?: number; values?: number[]; default: number };
     durationSupported?: boolean;
