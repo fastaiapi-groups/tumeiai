@@ -40,6 +40,7 @@ import { DramaAssetImageModels, DramaTextSteps, VideoResolutionField } from "./s
 import { EpisodeDurationInput, StoryboardRules } from "./storyboard-rules";
 import { DramaStylePicker } from "./style-picker";
 import { DramaCustomStyleEditorFastai, useDramaCustomStyleFastai } from "./style-custom-fastai";
+import { DramaPresetBarFastai } from "./drama-preset-fastai";
 import { ChapterPickList } from "./chapter-pick-list";
 import "./drama.css";
 
@@ -540,6 +541,16 @@ export default function DramaCreatePage() {
                     </section>
                     <DramaStylePicker value={styleId} onChange={setStyleId} disabled={create.isPending} />
                     <DramaCustomStyleEditorFastai active={customStyle.active} value={customStyle.custom} onToggle={customStyle.toggle} onChange={customStyle.setCustom} disabled={create.isPending} />
+                    <DramaPresetBarFastai // fastai: 一键套用制作预设
+                        disabled={create.isPending}
+                        onApply={(preset) => {
+                            if (preset.skills.bible) setBibleSkill(preset.skills.bible);
+                            if (preset.skills.script) setScriptSkill(preset.skills.script);
+                            if (preset.skills.prompt) setPromptSkill(preset.skills.prompt);
+                            setAssetDraft({ ...preset.assets, resolution: assets?.resolution, propResolution: assets?.propResolution, sceneResolution: assets?.sceneResolution });
+                            setStoryboard((current) => ({ ...current, ...preset.storyboard }));
+                        }}
+                    />
                     <section>
                         <div className="drama-section-title">
                             <h2>文字步骤</h2>

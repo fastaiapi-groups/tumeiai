@@ -3,7 +3,6 @@ import { Dropdown, Input, InputNumber, Slider } from "antd";
 import { ChevronDown, Film, TriangleAlert } from "lucide-react";
 
 import {
-    averageShotSeconds,
     clampEpisodeSeconds,
     DIALOGUE_LIMITS,
     DIALOGUE_PRESETS,
@@ -21,6 +20,8 @@ import {
     MIN_TRANSITION_MS,
     normalizeStoryboard,
     parseEpisodeSeconds,
+    SEGMENT_MAX_SHOTS_FASTAI,
+    segmentEstimateFastai,
     segmentLimits,
     segmentTargetSeconds,
     shotTarget,
@@ -101,6 +102,7 @@ const SEGMENT_MODES: Array<{ value: DramaSegmentMode; label: string; detail: str
     { value: "fixed", label: "固定", detail: "每段固定秒数，跨场景也按时长切" },
     { value: "range", label: "范围", detail: "每段在设定范围内，达到下限后在场景切换处断开" },
     { value: "shot", label: "按镜头", detail: "每个镜头单独生成，参考图最少；不足模型最短时长的镜头与后面合并，视频调用次数与费用明显增加" }, // fastai: 按镜头切段
+    { value: "scene", label: "按场景", detail: "换场景就另起一段，同一场景按每段镜头上限与模型单次上限顺序切开（精品剧分段规则）" }, // fastai: 按场景切段
 ];
 
 /** 剧情段切法的一句话说明，分镜规则卡与剧本页共用。 */
@@ -108,6 +110,7 @@ export function segmentRuleLabel(limits: SegmentLimits) {
     if (limits.mode === "fixed") return `每段 ${limits.max} 秒`;
     if (limits.mode === "range") return `每段 ${limits.min}–${limits.max} 秒`;
     if (limits.mode === "shot") return "按镜头切段"; // fastai: 按镜头切段
+    if (limits.mode === "scene") return limits.max ? `按场景切段 · 单段不超过 ${limits.max} 秒` : "按场景切段"; // fastai: 按场景切段
     return limits.max ? `智能切段 · 单段不超过 ${limits.max} 秒` : "智能切段";
 }
 /** 与后端 production.pacingRules 一致，从快到慢。 */
@@ -308,6 +311,19 @@ export function StoryboardRules({
                 <div className="drama-sbrules-segment">
                     <Segmented label="剧情段切分" value={rules.segmentMode} options={SEGMENT_MODES} onChange={(segmentMode) => set({ segmentMode })} />
                     {rules.segmentMode === "fixed" ? number(rules.segmentSeconds, (segmentSeconds) => set({ segmentSeconds }), "每段时长", { min: MIN_SEGMENT_SECONDS, max: MAX_SEGMENT_SECONDS }) : null}
+                    {rules.segmentMode === "scene" ? ( // fastai: 按场景切段每段最多镜头数
+                        <InputNumber
+                            className="drama-sbrules-number"
+                            size="small"
+                            min={SEGMENT_MAX_SHOTS_FASTAI.min}
+                            max={SEGMENT_MAX_SHOTS_FASTAI.max}
+                            precision={0}
+                            value={rules.segmentMaxShots}
+                            suffix="镜"
+                            aria-label="每段最多镜头数"
+                            onChange={(next) => typeof next === "number" && set({ segmentMaxShots: next })}
+                        />
+                    ) : null}
                     {rules.segmentMode === "range" ? (
                         <>
                             {number(rules.segmentMinSeconds, (segmentMinSeconds) => set({ segmentMinSeconds }), "每段最短", { min: MIN_SEGMENT_SECONDS, max: rules.segmentMaxSeconds })}
@@ -378,12 +394,12 @@ export function StoryboardRules({
                     {target ? (
                         <>
                             {" "}
-                            · {segmentRuleLabel(limits)}，{limits.mode === "auto" ? "至少" : "约"} <b>{Math.max(1, Math.ceil(episodeSeconds / target))}</b> 段 ·{" "}
+                            · {segmentRuleLabel(limits)}，{limits.mode === "auto" ? "至少" : "约"} <b>{segmentEstimateFastai(rules, limits.mode, episodeSeconds, target).segments /* fastai: 按场景切段按每段镜头上限估算 */}</b> 段 ·{" "}
                             {limits.mode === "shot" ? (
                                 <>每段 1 镜，过短的与后面合并</> /* fastai: 按镜头切段 */
                             ) : (
                                 <>
-                                    每段约 <b>{Math.max(1, Math.round(target / averageShotSeconds(rules)))}</b> 镜
+                                    每段约 <b>{segmentEstimateFastai(rules, limits.mode, episodeSeconds, target).shotsPerSegment}</b> 镜
                                 </>
                             )}
                         </>

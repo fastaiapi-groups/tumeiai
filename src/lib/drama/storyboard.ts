@@ -35,6 +35,26 @@ function directionLevel(value: unknown, fallback: number) {
     return Number.isFinite(level) && level > 0 ? clamp(level, DIRECTION_LEVEL_MIN, DIRECTION_LEVEL_MAX) : fallback;
 }
 
+/** fastai: “按场景”切段每段最多镜头数，与后端 production.DefaultSegmentMaxShotsFastai 等一致。 */
+export const SEGMENT_MAX_SHOTS_FASTAI = { default: 10, min: 3, max: 20 };
+export function segmentMaxShotsFastai(value: unknown) {
+    const shots = Math.round(Number(value));
+    return Number.isFinite(shots) && shots > 0 ? clamp(shots, SEGMENT_MAX_SHOTS_FASTAI.min, SEGMENT_MAX_SHOTS_FASTAI.max) : SEGMENT_MAX_SHOTS_FASTAI.default;
+}
+
+/**
+ * fastai: 剧情段摘要估算。“按场景”切段每段不超过设定镜头数，段数按“总镜头数 ÷ 每段上限”与“时长 ÷ 段长”取大；
+ * 其余模式按段长折算镜头数，与原有估算一致。
+ */
+export function segmentEstimateFastai(settings: DramaStoryboardSettings, mode: DramaSegmentMode, episodeSeconds: number, targetSeconds: number) {
+    const bySeconds = Math.max(1, Math.ceil(episodeSeconds / targetSeconds));
+    const perSegment = Math.max(1, Math.round(targetSeconds / averageShotSeconds(settings)));
+    if (mode !== "scene") return { segments: bySeconds, shotsPerSegment: perSegment };
+    const maxShots = segmentMaxShotsFastai(settings.segmentMaxShots);
+    const segments = Math.max(bySeconds, Math.ceil(shotTarget(settings, episodeSeconds) / maxShots));
+    return { segments, shotsPerSegment: Math.min(maxShots, Math.max(1, Math.round(shotTarget(settings, episodeSeconds) / segments))) };
+}
+
 /** fastai: “按镜头”档估算段数用的典型段长（秒），不足模型下限的镜头会与后面的镜头合并。 */
 export const SHOT_SEGMENT_SECONDS_FASTAI = 5;
 
@@ -74,8 +94,9 @@ export function normalizeStoryboard(input?: Partial<DramaStoryboardSettings>): D
     };
     const tenth = (n: number) => Math.round(n * 10) / 10;
     return {
-        // fastai: shot 为按镜头切段
-        segmentMode: (["fixed", "range", "auto", "shot"] as DramaSegmentMode[]).includes(value.segmentMode) ? value.segmentMode : DEFAULT_STORYBOARD.segmentMode,
+        // fastai: shot 为按镜头切段，scene 为按场景切段
+        segmentMode: (["fixed", "range", "auto", "shot", "scene"] as DramaSegmentMode[]).includes(value.segmentMode) ? value.segmentMode : DEFAULT_STORYBOARD.segmentMode,
+        segmentMaxShots: segmentMaxShotsFastai(value.segmentMaxShots), // fastai: 按场景切段
         segmentSeconds: seconds(value.segmentSeconds, DEFAULT_STORYBOARD.segmentSeconds),
         segmentMinSeconds: Math.min(low, high),
         segmentMaxSeconds: Math.max(low, high),
@@ -125,6 +146,7 @@ export function segmentLimits(settings: DramaStoryboardSettings, modelMaxSeconds
         return { mode: "range", min: Math.min(capped(rules.segmentMinSeconds), max), max };
     }
     if (rules.segmentMode === "shot") return { mode: "shot", min: 0, max: modelMaxSeconds || 0 }; // fastai: 按镜头切段
+    if (rules.segmentMode === "scene") return { mode: "scene", min: 0, max: modelMaxSeconds || 0 }; // fastai: 按场景切段
     return { mode: "auto", min: 0, max: modelMaxSeconds || 0 };
 }
 

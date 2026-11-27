@@ -50,7 +50,8 @@ function SchemeGlyph({ mode }: { mode: DramaAssetMode }) {
                 <i />
             </span>
         );
-    if (mode === "turnaround")
+    if (mode === "turnaround" || mode === "laotang_full" || mode === "laotang_headless")
+        // fastai: 三列资产板
         return (
             <span className="drama-glyph is-turnaround">
                 <i />

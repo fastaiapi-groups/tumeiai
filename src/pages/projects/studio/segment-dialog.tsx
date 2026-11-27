@@ -514,6 +514,7 @@ function ShotCard({
     const rows: Array<[string, string]> = [
         ["景别", [shot.shotSize, shot.camera ? `运镜 ${shot.camera}` : "", shot.transition && shot.transition !== "cut" && shot.position > 0 ? `转场 ${TRANSITION_LABEL[shot.transition]}` : ""].filter(Boolean).join(" · ")],
         ["场景", shot.scene],
+        ...(shot.direction ? [["镜头设计", shot.direction] as [string, string]] : []), // fastai: 镜头设计
         ["画面", shot.imagePrompt],
         ["动作", shot.action],
         ["运动", shot.videoPrompt],
@@ -907,6 +908,7 @@ export function ShotEditor({ shot, onPatch }: { shot: DramaShot; onPatch: (patch
                     />
                 </label>
             </div>
+            <FieldText label="镜头设计" value={shot.direction || ""} rows={1} onSave={(value) => onPatch({ direction: value })} /> {/* fastai: 空间类型｜焦段｜机位角度｜人物/非人物镜头 */}
             <FieldText label="动作" value={shot.action} rows={2} onSave={(value) => onPatch({ action: value })} />
             <FieldText label="起幅画面" value={shot.imagePrompt} rows={2} onSave={(value) => onPatch({ imagePrompt: value })} />
             {shot.sourceQuote ? (

@@ -25,7 +25,7 @@ export type DramaReviewMode = "sample" | "every" | "auto";
 /** manual：先只跑剧本、分镜、设定与视频提示词，确认后手动开始生成参考图与视频；auto：一路跑到成片。 */
 export type DramaMediaMode = "manual" | "auto";
 
-export type DramaAssetMode = "portrait" | "turnaround" | "fourview" | "custom";
+export type DramaAssetMode = "portrait" | "turnaround" | "fourview" | "laotang_full" | "laotang_headless" | "custom"; // fastai: laotang_* 三列资产板
 
 /** 角色/场景/道具参考图方案：保存的是全文提示词，用户看到的就是实际发送的内容。 */
 export type DramaAssetSettings = {
@@ -56,7 +56,7 @@ export type DramaAssetScheme = {
 export type DramaAssetSchemeCatalog = { schemes: DramaAssetScheme[]; scenePrompt: string; propPrompt: string; characterVariables: string[]; sceneVariables: string[]; propVariables: string[] };
 
 /** 剧情段怎么切：智能按场景与冲突切、单段不超过模型上限；固定每段 segmentSeconds 秒；范围在 segmentMin–MaxSeconds 之间。 */
-export type DramaSegmentMode = "auto" | "fixed" | "range" | "shot"; // fastai: shot 按镜头切段
+export type DramaSegmentMode = "auto" | "fixed" | "range" | "shot" | "scene"; // fastai: shot 按镜头切段，scene 按场景切段
 
 /**
  * 分镜规则：剧情段（一次视频调用）怎么切、镜头节奏、对白密度与转场。
@@ -82,6 +82,8 @@ export type DramaStoryboardSettings = {
     performance: number;
     /** 运镜动感 1–10（1 静态、5 有动机的运镜、10 强烈冲击）。 */
     cameraMotion: number;
+    /** fastai: “按场景”切段时每段最多镜头数（3–20，缺省 10）。 */
+    segmentMaxShots?: number;
 };
 
 export type DramaPacing = "rapid" | "fast" | "standard" | "relaxed" | "slow";
@@ -236,6 +238,8 @@ export type DramaShot = {
     action: string;
     shotSize: string;
     camera: string;
+    /** fastai: 镜头设计“空间类型｜焦段｜机位角度｜人物/非人物镜头”，由分镜技能填写。 */
+    direction?: string;
     transition: DramaTransition | "";
     durationMs: number;
     imagePrompt: string;
@@ -671,7 +675,7 @@ export function composeDramaEpisode(projectId: string, episodeId: string) {
     return http.post<DramaEpisodeDetail>(`${base(projectId)}/episodes/${encodeURIComponent(episodeId)}/compose`);
 }
 
-export type DramaShotPatch = Partial<Pick<DramaShot, "speaker" | "dialogue" | "action" | "shotSize" | "camera" | "imagePrompt" | "videoPrompt">> & { transition?: DramaTransition; durationSeconds?: number };
+export type DramaShotPatch = Partial<Pick<DramaShot, "speaker" | "dialogue" | "action" | "shotSize" | "camera" | "direction" | "imagePrompt" | "videoPrompt">> & { transition?: DramaTransition; durationSeconds?: number };
 
 /** 让文本模型（重新）撰写指定剧情段的完整视频提示词。 */
 export function writeDramaSegmentPrompts(projectId: string, episodeId: string, segments: number[]) {

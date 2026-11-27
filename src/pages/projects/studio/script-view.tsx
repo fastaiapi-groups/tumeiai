@@ -17,7 +17,7 @@ import type { EpisodeEmpty } from "./storyboard";
 function storyboardSummary(value: DramaStoryboardSettings) {
     const rules = normalizeStoryboard(value);
     const dialogue = rules.dialogue === "custom" ? `自定义（每秒 ${rules.speechRate} 字，每 ${rules.lineSeconds} 秒一句）` : { dense: "密集", standard: "标准", sparse: "克制" }[rules.dialogue];
-    const duration = `${PACING_LABEL[rules.pacing]}（平均 ${averageShotSeconds(rules)} 秒/镜）· 对白${dialogue} · 剧情段${{ auto: "智能切分", fixed: `固定 ${rules.segmentSeconds} 秒`, range: `${rules.segmentMinSeconds}–${rules.segmentMaxSeconds} 秒`, shot: "按镜头切分" /* fastai */ }[rules.segmentMode]}`;
+    const duration = `${PACING_LABEL[rules.pacing]}（平均 ${averageShotSeconds(rules)} 秒/镜）· 对白${dialogue} · 剧情段${{ auto: "智能切分", fixed: `固定 ${rules.segmentSeconds} 秒`, range: `${rules.segmentMinSeconds}–${rules.segmentMaxSeconds} 秒`, shot: "按镜头切分" /* fastai */, scene: `按场景切分（每段最多 ${rules.segmentMaxShots} 镜）` /* fastai */ }[rules.segmentMode]}`;
     const transition = rules.transition === "auto" ? "转场智能" : `转场统一${TRANSITION_LABEL[rules.transition]}`;
     return `${duration} · ${transition}`;
 }
@@ -192,6 +192,7 @@ export function ScriptView({
                                             <div className="drama-screenplay-tags">
                                                 {shot.shotSize ? <span>{shot.shotSize}</span> : null}
                                                 {shot.camera && shot.camera !== "固定" ? <span>{shot.camera}</span> : null}
+                                                {shot.direction ? <span title="镜头设计">{shot.direction}</span> : null /* fastai: 镜头设计 */}
                                                 <span>{(shot.durationMs / 1000).toFixed(1)}s</span>
                                                 {shot.transition && shot.transition !== "cut" ? <span className="is-transition">{TRANSITION_LABEL[shot.transition as keyof typeof TRANSITION_LABEL]}进入</span> : null}
                                                 {shot.sourceQuote ? (
